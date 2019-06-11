@@ -1,0 +1,10 @@
+package hashmap;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MyHashMap<K, V> implements Map {
+	
+	List<V> buccket = new ArrayList<>();
+
+}

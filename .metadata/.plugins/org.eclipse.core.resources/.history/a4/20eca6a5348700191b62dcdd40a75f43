@@ -1,0 +1,21 @@
+package interveiw.graph;
+
+public class BST {
+	
+	
+	
+	
+	
+	public class TreeNode {
+		private TreeNode left;
+		private int val;
+		private TreeNode right;
+		
+		public TreeNode(TreeNode left, int value, TreeNode right) {
+			this.left = left;
+			val = value;
+			this.right = right;
+		}
+	}
+
+}

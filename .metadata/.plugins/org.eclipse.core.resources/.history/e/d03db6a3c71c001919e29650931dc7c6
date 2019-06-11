@@ -1,0 +1,32 @@
+package hashmap;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class MyHashMap<K, V> implements Map {
+	
+	//use defualt hashmap slots of 16.
+	Entry[] bucket = new Entry[16];
+	
+	public boolean put(K key, V value) {
+		int hashvalue =Objects.hashCode(key);
+		int bucketIndex = hashvalue%16;
+		Entry newEntry = new Entry(key, value);
+		bucket[bucketIndex] = value;
+		return true;
+	}
+	
+	
+	
+	public static class Entry<K, V> {
+		private K key;
+		private V value;
+		
+		public Entry(K k, V v) {
+			this.key = k;
+			this.value = v;
+		}
+	}
+
+}

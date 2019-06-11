@@ -1,0 +1,22 @@
+package hashmap;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MyHashMap<K, V> implements Map {
+	
+	Entry[] buccket = new Entry[16];
+	
+	public boolean put(K key, V value) {
+		
+		return true;
+	}
+	
+	
+	
+	public static class Entry<K, V> {
+		private K key;
+		private V value;
+	}
+
+}

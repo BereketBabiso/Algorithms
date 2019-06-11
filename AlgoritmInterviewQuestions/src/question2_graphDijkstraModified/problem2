@@ -1,0 +1,23 @@
+Given an undirected weighted graph. The task is to find the minimum cost of the path from source node to the destination node via an intermediate node.
+
+Note: If an edge is traveled twice, only once weight is calculated as cost.
+
+<0>----1-----<1>-----2-----<2>
+              |
+              |
+              |
+              3
+              |
+              |
+             <3>
+
+Input: source = 0, destination = 2, intermediate = 3;
+Output: 6
+The minimum cost path 0->1->3->1->2
+The edge (1-3) occurs twice in the path, but its weight is
+added only once to the answer.
+
+Input: source = 0, destination = 2, intermediate = 1;
+Output: 3
+The minimum cost path is 0->1>2
+

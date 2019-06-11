@@ -1,0 +1,45 @@
+package hashmap;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+public class MyHashMap<K, V> implements Map {
+	
+	//use defualt hashmap slots of 16.
+	Entry[] bucket = new Entry[16];
+	
+	public boolean put(K key, V value) {
+		int hashvalue =Objects.hashCode(key);
+		int bucketIndex = hashvalue%16;
+		Entry newEntry = new Entry(key, value);
+		bucket[bucketIndex] = newEntry;
+		return true;
+	}
+	
+	public Entry[] getBucket() {
+		return bucket;
+	}
+	
+	
+	
+	public static class Entry<K, V> {
+		private K key;
+		private V value;
+		
+		public Entry(K k, V v) {
+			this.key = k;
+			this.value = v;
+		}
+		
+		@Override
+		public String toString() {
+			return "{key : "+key+", value : "+value+"}";
+		}
+	}
+
+	public static void main(String[] args) {
+		MyHashMap map = new MyHashMap();
+		map.put("name", "bereket");
+		Arrays.asList(map.getBucket()).parallelStream().filter(entry->entry!=null).forEach(System.out::println);
+	}
+}

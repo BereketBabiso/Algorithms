@@ -1,0 +1,179 @@
+package breathFirstSearchImp1;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
+
+
+public class Graph {
+	
+	List<Vertex> listVerts = new ArrayList<>();
+	List<Edge> listEdges = new ArrayList<>();
+	HashMap<Vertex,List<Vertex>> adjList = new HashMap<>();
+	
+	HashMap<Vertex,Vertex> listOfVistedVerts = new HashMap<>();
+	List<Edge> spanningTree = new ArrayList<>();
+	HashMap<Vertex,Integer> vertexLevel = new HashMap<>();
+	Integer counter=0;
+	
+	HashMap<Vertex,Vertex> parentMap = new HashMap<>();
+	HashMap<Vertex,Edge> pathMap = new HashMap<>();
+	Vertex parentVert = null; //intialize to null since the root vertex does not have parent
+	Edge path = null; //initialize to null since there is no path to get to root from root vertex
+	
+	
+	public Graph(Edge[] givenEdges) {
+		HashMap<Vertex,Vertex> dupverts = new HashMap<>();//controls duplicate vertices
+		for(int i=0;i<givenEdges.length;i++) {
+			Vertex v1 = givenEdges[i].getU();
+			Vertex v2 = givenEdges[i].getV();
+			listEdges.add(givenEdges[i]);
+			
+			if(dupverts.get(v1)==null) {
+				dupverts.put(v1,v1);
+				listVerts.add(v1);
+			}
+			if(dupverts.get(v2)==null) {
+				dupverts.put(v2, v2);
+				listVerts.add(v2);
+			}
+			
+			List<Vertex> adjv1 = adjList.get(v1);
+			if(adjv1==null) {
+				adjv1 = new ArrayList<Vertex>();
+			}
+			adjv1.add(v2);
+			adjList.put(v1,adjv1);
+			List<Vertex> adjv2 = adjList.get(v2);
+			if(adjv2==null) {
+				adjv2 = new ArrayList<>();
+			}
+			adjv2.add(v1);
+			adjList.put(v2,adjv2);
+			
+		}
+	}
+	
+	public void BreathFirstSearch(Vertex s) {
+		Queue<Vertex> Q = new ArrayDeque<Vertex>();
+		handleInitialProcessing(s,Q);
+		singleComponenetLoop(Q);
+		
+	}
+	public void handleInitialProcessing(Vertex s, Queue<Vertex> Q) {
+		Q.add(s);
+		processVertex(s);
+		additionalProcessing(); // this is used for shortest-path-length
+		additionalProcessing2(s,s);//this is for root vertex, used for shortest-path
+	}
+	
+	public void processVertex(Vertex v) {
+		this.listOfVistedVerts.put(v, v); // mark v as visited
+		if(this.vertexLevel.get(v)==null) {
+			this.vertexLevel.put(v, counter);
+		}
+						
+	}
+	
+	public void processEdge(Vertex v, Vertex w) {
+		this.spanningTree.add(new Edge(v,w));
+	}
+	
+	//this method is for finding the shortest path length b/w two vertices
+	public void additionalProcessing() {
+		this.counter++;
+	}
+	//this method is for finding the shortest path (not length) b/w two vertices
+	public void additionalProcessing2(Vertex p,Vertex c ) {
+		this.parentVert = p;
+		if(p.equals(c)) {
+			this.parentMap.put(p, null);
+			this.pathMap.put(p, null);
+		}
+		else {
+			this.parentMap.put(c, p);
+			Edge path = new Edge(p,c);
+			this.pathMap.put(c, path);
+		}
+	}
+	
+	public void singleComponenetLoop(Queue<Vertex> Q) {
+		
+		while(!Q.isEmpty()) {			
+			Vertex v = Q.remove();			
+			List<Vertex> adjToV = this.adjList.get(v);			
+			List<Vertex> adjVertsNotVisited = new ArrayList<>();
+			if(!adjToV.isEmpty()) {
+				adjToV.forEach(vert -> {if(this.listOfVistedVerts.get(vert)==null) adjVertsNotVisited.add(vert);});
+			}
+			
+			adjVertsNotVisited.forEach(vert -> {
+				Q.add(vert);
+				processVertex(vert);
+				processEdge(v,vert);
+				additionalProcessing2(v,vert);
+			});
+			
+			if(!adjVertsNotVisited.isEmpty()) {
+				additionalProcessing();
+			}
+			
+		}
+	}
+	
+	public int shortestPathLength(Vertex s, Vertex d) {
+		BreathFirstSearch(s);
+		return this.vertexLevel.get(d);
+	}
+	
+	public String shortestPath(Vertex s,Vertex d){
+		BreathFirstSearch(s);
+		Vertex temp = this.parentMap.get(d);
+		String path =d.toString();
+		while(temp!=null) {
+			path=temp.toString()+"-"+path;
+			temp=this.parentMap.get(temp);
+		}
+		return path;
+	}
+	
+	public List<Edge> getSpanningTree(){
+		return this.spanningTree;
+	}
+	
+	public List<Edge> dfs(Vertex s) {
+		Stack<Vertex> stack = new Stack<>();
+		stack.add(s);
+		listOfVistedVerts.put(s,s);
+		System.out.println(">>>>> : " + s);
+		while(!stack.isEmpty()) {
+			Vertex v = stack.peek();
+			System.out.println("is empty " + stack.isEmpty());
+			List<Vertex> adjacentToV = adjList.get(v);
+			boolean flag = false;
+			if(!adjacentToV.isEmpty()) {
+				for(Vertex w :adjacentToV){
+					if(listOfVistedVerts.get(w)==null) {
+						listOfVistedVerts.put(w,w);
+						Edge edge = new Edge(v,w);
+						spanningTree.add(edge);
+						stack.push(w);
+						System.out.println("edge");
+						break;
+					} else {
+						//stack.pop();
+					}
+				};
+			} else {
+				//stack.pop();
+			}
+		}
+		return this.spanningTree;
+	}
+
+}

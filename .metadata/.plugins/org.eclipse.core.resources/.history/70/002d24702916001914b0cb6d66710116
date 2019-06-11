@@ -1,0 +1,48 @@
+package equalsubsetsumpartition;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+public class PartitionSet {
+	List<Integer> list = new LinkedList<>();
+	
+	public boolean canPartition(int[] nums) {
+		return partition(nums, nums.length-1);
+	}
+	
+	public boolean partition(int[] nums, int k) {
+		if(k<0) return false;
+		if(nums.length<=1) return false;
+		if(list.size() == nums.length-1) return false;
+		int x = nums[k];
+		list.add(x);
+		if(checkEquality(nums)) {
+			return true;
+		}
+		if(partition(nums, k-1)) {
+			return true;
+		}else {
+			list.remove(list.size()-1);
+		}
+		return partition(nums,k-1);
+		
+	}
+
+	private boolean checkEquality(int[] nums) {
+		int sum1 = list.stream().reduce(0,(a,b)-> (a+b));
+		int sum2 = 0;
+		for(int i=0;i<nums.length;i++) {
+			sum2+=nums[i];
+		}
+		return sum2 - sum1 == sum1;
+	}
+
+	public static void main(String[] args) {
+		int[] arr = {3,5,3,6};
+		PartitionSet ps = new PartitionSet();
+		System.out.println("result : "+ps.canPartition(arr));
+	}
+
+}

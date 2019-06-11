@@ -1,0 +1,60 @@
+package subsetsumDP;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class SubSetSumDP {
+	
+	private Map<Key, Boolean> map = new HashMap<>();
+	private boolean result = false;
+	
+	public boolean subSetSum(List<Integer> set, int k) {
+		System.out.println("checking");
+		if(k<0) return false;
+		if(set.size()==0 && k==0) {
+			result=true;
+			return true;
+		}
+		if(set.size()==0) return false;
+		if(set.size()==1) {
+			if(set.get(0)==k) result=true;
+			return set.get(0)==k;
+		}
+		int x = set.remove(set.size()-1);
+		Key tempKey = new Key (set,k);
+		if(!map.containsKey(tempKey)) {
+			map.put(tempKey, subSetSum(set, k));
+		}
+	
+		if(map.get(tempKey)) return true;	
+		Key tempKey2 = new Key(set, k-x);
+		if(!map.containsKey(tempKey2)) {
+			
+			if(k-x==0) {
+				result = true;
+				map.put(tempKey2, true);
+			}
+			else map.put(tempKey2, subSetSum(set, k-x));
+		}
+//		if(map.get(tempKey2)) return true;
+		
+		
+		return result;
+		
+	}
+
+	public static void main(String[] args) {
+		SubSetSumDP ss = new SubSetSumDP();
+		List<Integer> list = new LinkedList<>();
+		list.add(1);
+		list.add(3);
+		list.add(5);
+		int k = 3;
+			
+		System.out.println(ss.subSetSum(list, k));
+
+	}
+
+}

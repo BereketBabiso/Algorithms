@@ -1,0 +1,24 @@
+package equalsubsetsumpartition;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PartitionSet {
+	List<Integer> list = new ArrayList<>();
+	
+	public boolean canPartition(int[] nums) {
+		
+	}
+	
+	public boolean partition(int[] nums, int k) {
+		if(k<0) return false;
+		if(nums.length<=1) return false;
+		
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,9 @@
+package hashmap;
+
+import java.util.Objects;
+
+public interface Map<K, V> {
+	
+	
+
+}
